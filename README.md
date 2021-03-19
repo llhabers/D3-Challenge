@@ -1,4 +1,5 @@
 # D3-Challenge
+![D3](https://camo.githubusercontent.com/dc86212a5cfcaee4aa0683039917f5047018852c446bef81d9515eb1ffa13b37/68747470733a2f2f6d656469612e67697068792e636f6d2f6d656469612f763278496f7573376d6e4559672f67697068792e676966)<br>
 The project aims to understand health risks facing particular demographics by examining information from the U.S. Census Bureau and creating visualizations using D3.
 
 ## Situation
