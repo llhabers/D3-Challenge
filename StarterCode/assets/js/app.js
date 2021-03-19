@@ -30,20 +30,24 @@ d3.csv("assets/data/data.csv").then(function(stateData) {
     // Step 1: Parse Data/Cast as numbers
     // ==============================
     stateData.forEach(function(data) {
+        data.age = +data.age;
+        data.smokes = +data.smokes;
         data.poverty = +data.poverty;
         data.healthcare = +data.healthcare;
+        data.abbr = data.abbr;
+        data.income = +data.income;
         console.log(data);
     });
 
     // Step 2: Create scale functions
     // ==============================
     var xLinearScale = d3.scaleLinear()
-      .domain([5, d3.max(stateData, d => d.poverty)])
+      .domain([8.5, d3.max(stateData, d => d.poverty)])
       .range([0, width])
       .nice();
 
     var yLinearScale = d3.scaleLinear()
-      .domain([0, d3.max(stateData, d => d.healthcare)])
+      .domain([3.5, d3.max(stateData, d => d.healthcare)])
       .range([height, 0])
       .nice();
 
@@ -70,16 +74,34 @@ d3.csv("assets/data/data.csv").then(function(stateData) {
     .attr("cx", d => xLinearScale(d.poverty))
     .attr("cy", d => yLinearScale(d.healthcare))
     .attr("r", "10")
+    .attr("fill", "lightblue")
+    .attr("opacity", ".6")
     .attr("stroke-width", "1")
-    .classed("stateCircle", true)
-    .attr("opacity", ".75");
+    .attr("stroke", "black");
+
+    chartGroup.select("g")
+    .selectAll("circle")
+    .data(stateData)
+    .enter()
+    .append("text")
+    .text(d => d.abbr)
+    .attr("x", d => xLinearScale(d.poverty))
+    .attr("y", d => yLinearScale(d.healthcare))
+    .attr("dy",-395)
+    .attr("text-anchor", "middle")
+    .attr("font-size", "12px")
+    .attr("fill", "black");
+
+    console.log(stateData);
 
     // Step 6: Initialize tool tip
     // ==============================
     var toolTip = d3.tip()
-      .attr("id", "tooltip")
-      .offset([80, -60])
-      .html(function(d) {
+    .select('body')
+    .append('div')
+    .attr('class', "tooltip")
+    .offset([80, -60])
+    .html(function(d) {
         return (`Poverty: ${d.poverty}<br>Healthcare: ${d.healthcare}`);
       });
 
@@ -102,18 +124,21 @@ d3.csv("assets/data/data.csv").then(function(stateData) {
       .attr("transform", "rotate(-90)")
       .attr("y", 0 - ((margin.left / 2) + 2))
       .attr("x", 0 - (height / 2))
-      .attr("text-anchor", "middle")
-      .attr("font-size", "16px")
-      .attr("fill", "black")
-      .style("font-weight", "bold")
+      .attr("dy", "1em")
+      .attr("class", "axisText")
+    //   .attr("text-anchor", "middle")
+    //   .attr("font-size", "16px")
+    //   .attr("fill", "black")
+    //   .style("font-weight", "bold")
       .text("Lacks Healthcare (%)");
 
     chartGroup.append("text")
       .attr("transform", `translate(${width / 2}, ${height + margin.top + 13})`)
-      .attr("text-anchor", "middle")
-      .attr("font-size", "16px")
-      .attr("fill", "black")
-      .style("font-weight", "bold")
+      .attr("class", "axisText")
+    //   .attr("text-anchor", "middle")
+    //   .attr("font-size", "16px")
+    //   .attr("fill", "black")
+    //   .style("font-weight", "bold")
       .text("In Poverty (%)");
   }).catch(function(error) {
     console.log(error);
